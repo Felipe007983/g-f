@@ -1,0 +1,15 @@
+{
+  "name": "financeiro-gabriel-backend",
+  "version": "1.0.0",
+  "description": "API de gestão de empréstimos e parcelas",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "uuid": "^11.0.5"
+  }
+}
