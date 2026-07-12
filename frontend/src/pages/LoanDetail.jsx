@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { api, formatDate, formatMoney, statusLabel } from '../api';
 import ConfirmModal from '../components/ConfirmModal';
 import StatusBadge from '../components/StatusBadge';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 export default function LoanDetail() {
   const { id } = useParams();
@@ -228,7 +229,7 @@ export default function LoanDetail() {
 
       <div className="panel">
         <h2>Parcelas</h2>
-        <div className="table-wrap">
+        <ResponsiveTable>
           <table>
             <thead>
               <tr>
@@ -294,7 +295,7 @@ export default function LoanDetail() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ResponsiveTable>
       </div>
 
       <ConfirmModal

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { api, formatDate, formatMoney } from '../api';
 import DateRangeFilter, { currentMonthRange } from '../components/DateRangeFilter';
 import StatusBadge from '../components/StatusBadge';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const defaultRange = currentMonthRange();
 
@@ -108,7 +109,7 @@ export default function Installments() {
         ) : items.length === 0 ? (
           <div className="empty">Nenhuma parcela encontrada.</div>
         ) : (
-          <div className="table-wrap">
+          <ResponsiveTable>
             <table>
               <thead>
                 <tr>
@@ -178,7 +179,7 @@ export default function Installments() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ResponsiveTable>
         )}
       </div>
     </div>

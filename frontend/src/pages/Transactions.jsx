@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, formatDate, formatMoney } from '../api';
 import DateRangeFilter, { currentMonthRange } from '../components/DateRangeFilter';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const defaultRange = currentMonthRange();
 
@@ -82,7 +83,7 @@ export default function Transactions() {
         ) : items.length === 0 ? (
           <div className="empty">Nenhuma transação.</div>
         ) : (
-          <div className="table-wrap">
+          <ResponsiveTable>
             <table>
               <thead>
                 <tr>
@@ -123,7 +124,7 @@ export default function Transactions() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ResponsiveTable>
         )}
       </div>
     </div>

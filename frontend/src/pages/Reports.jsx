@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api, formatDate, formatMoney } from '../api';
 import DateRangeFilter, { currentMonthRange } from '../components/DateRangeFilter';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const defaultRange = currentMonthRange();
 
@@ -76,7 +77,8 @@ export default function Reports() {
               {report.byPerson.length === 0 ? (
                 <div className="empty">Sem recebimentos no período.</div>
               ) : (
-                <table>
+                <ResponsiveTable>
+                  <table>
                   <thead>
                     <tr>
                       <th>Cliente</th>
@@ -93,7 +95,8 @@ export default function Reports() {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                  </table>
+                </ResponsiveTable>
               )}
             </div>
 
@@ -102,7 +105,7 @@ export default function Reports() {
               {report.transactions.length === 0 ? (
                 <div className="empty">Sem lançamentos.</div>
               ) : (
-                <div className="table-wrap" style={{ maxHeight: 420, overflow: 'auto' }}>
+                <ResponsiveTable style={{ maxHeight: 420, overflow: 'auto' }}>
                   <table>
                     <thead>
                       <tr>
@@ -123,7 +126,7 @@ export default function Reports() {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </ResponsiveTable>
               )}
             </div>
           </div>

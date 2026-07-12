@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { api, formatDate, formatMoney } from '../api';
 import DateRangeFilter, { currentMonthRange } from '../components/DateRangeFilter';
 import StatusBadge from '../components/StatusBadge';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const defaultRange = currentMonthRange();
 
@@ -97,7 +98,7 @@ export default function Dashboard() {
           {unpaid.items.length === 0 ? (
             <div className="empty">Nenhuma parcela pendente neste período.</div>
           ) : (
-            <div className="table-wrap">
+            <ResponsiveTable>
               <table>
                 <thead>
                   <tr>
@@ -126,7 +127,7 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTable>
           )}
         </div>
 
@@ -135,7 +136,7 @@ export default function Dashboard() {
           {data.peopleWithDebt.length === 0 ? (
             <div className="empty">Ninguém com débito no momento.</div>
           ) : (
-            <div className="table-wrap">
+            <ResponsiveTable>
               <table>
                 <thead>
                   <tr>
@@ -160,7 +161,7 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTable>
           )}
         </div>
       </div>
@@ -198,7 +199,7 @@ export default function Dashboard() {
           {data.recentTransactions.length === 0 ? (
             <div className="empty">Sem transações.</div>
           ) : (
-            <div className="table-wrap">
+            <ResponsiveTable>
               <table>
                 <thead>
                   <tr>
@@ -232,7 +233,7 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTable>
           )}
           <div style={{ marginTop: '0.75rem' }}>
             <Link className="linkish" to="/transacoes">

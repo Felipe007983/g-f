@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, formatMoney } from '../api';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const emptyForm = {
   name: '',
@@ -107,7 +108,7 @@ export default function People() {
         ) : list.length === 0 ? (
           <div className="empty">Nenhum cliente encontrado.</div>
         ) : (
-          <div className="table-wrap">
+          <ResponsiveTable>
             <table>
               <thead>
                 <tr>
@@ -151,7 +152,7 @@ export default function People() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ResponsiveTable>
         )}
       </div>
 

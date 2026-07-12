@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, formatDate, formatMoney, statusLabel } from '../api';
 import SearchableSelect from '../components/SearchableSelect';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -93,7 +94,7 @@ export default function Loans() {
         ) : loans.length === 0 ? (
           <div className="empty">Nenhum empréstimo cadastrado.</div>
         ) : (
-          <div className="table-wrap">
+          <ResponsiveTable>
             <table>
               <thead>
                 <tr>
@@ -142,7 +143,7 @@ export default function Loans() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ResponsiveTable>
         )}
       </div>
 

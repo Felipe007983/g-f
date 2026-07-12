@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { api, formatDate, formatMoney, statusLabel } from '../api';
 import ConfirmModal from '../components/ConfirmModal';
 import StatusBadge from '../components/StatusBadge';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 export default function PersonDetail() {
   const { id } = useParams();
@@ -114,7 +115,7 @@ export default function PersonDetail() {
           {loans.length === 0 ? (
             <div className="empty">Nenhum empréstimo.</div>
           ) : (
-            <div className="table-wrap">
+            <ResponsiveTable>
               <table>
                 <thead>
                   <tr>
@@ -179,14 +180,14 @@ export default function PersonDetail() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTable>
           )}
         </div>
       </div>
 
       <div className="panel">
         <h2>Parcelas</h2>
-        <div className="table-wrap">
+        <ResponsiveTable>
           <table>
             <thead>
               <tr>
@@ -219,7 +220,7 @@ export default function PersonDetail() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ResponsiveTable>
       </div>
 
       <div className="panel">
@@ -227,36 +228,38 @@ export default function PersonDetail() {
         {transactions.length === 0 ? (
           <div className="empty">Sem transações.</div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Tipo</th>
-                <th>Valor</th>
-                <th>Nota</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((t) => (
-                <tr key={t.id}>
-                  <td>{formatDate(t.date)}</td>
-                  <td>
-                    {t.type === 'payment'
-                      ? 'Recebimento'
-                      : t.type === 'loan_settled'
-                        ? 'Quitação'
-                        : t.type === 'loan_cancelled'
-                          ? 'Cancelamento'
-                          : t.type === 'rate_update'
-                            ? 'Atualização de taxas'
-                            : 'Empréstimo'}
-                  </td>
-                  <td>{t.type === 'payment' || t.type === 'loan_settled' ? formatMoney(t.amount) : '—'}</td>
-                  <td>{t.note}</td>
+          <ResponsiveTable>
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Tipo</th>
+                  <th>Valor</th>
+                  <th>Nota</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {transactions.map((t) => (
+                  <tr key={t.id}>
+                    <td>{formatDate(t.date)}</td>
+                    <td>
+                      {t.type === 'payment'
+                        ? 'Recebimento'
+                        : t.type === 'loan_settled'
+                          ? 'Quitação'
+                          : t.type === 'loan_cancelled'
+                            ? 'Cancelamento'
+                            : t.type === 'rate_update'
+                              ? 'Atualização de taxas'
+                              : 'Empréstimo'}
+                    </td>
+                    <td>{t.type === 'payment' || t.type === 'loan_settled' ? formatMoney(t.amount) : '—'}</td>
+                    <td>{t.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTable>
         )}
       </div>
 
