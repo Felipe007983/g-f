@@ -1,6 +1,12 @@
 const BASE = '/api';
 const TOKEN_KEY = 'fg_auth_token';
 
+let onUnauthorized = null;
+
+export function setOnUnauthorized(handler) {
+  onUnauthorized = handler;
+}
+
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -30,9 +36,7 @@ async function request(path, options = {}) {
 
   if (res.status === 401 && !path.startsWith('/auth/login')) {
     clearToken();
-    if (!window.location.hash.includes('/login')) {
-      window.location.assign('/#/login');
-    }
+    onUnauthorized?.();
   }
 
   if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
