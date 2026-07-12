@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from './auth';
 import Dashboard from './pages/Dashboard';
@@ -27,9 +28,50 @@ function ProtectedRoute({ children }) {
 
 function AppLayout() {
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.classList.toggle('menu-open', menuOpen);
+    return () => document.body.classList.remove('menu-open');
+  }, [menuOpen]);
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${menuOpen ? 'nav-open' : ''}`}>
+      <header className="mobile-topbar">
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <div className="mobile-topbar-brand">
+          <span className="brand-mark">G&F</span>
+          <strong>G&F Financeiro</strong>
+        </div>
+        <button type="button" className="btn btn-sm btn-ghost mobile-logout" onClick={logout}>
+          Sair
+        </button>
+      </header>
+
+      {menuOpen && (
+        <button
+          type="button"
+          className="nav-backdrop"
+          aria-label="Fechar menu"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+
       <aside className="sidebar">
         <div className="brand">
           <span className="brand-mark">G&F</span>

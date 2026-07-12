@@ -27,6 +27,7 @@ body,
 #root {
   margin: 0;
   min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
@@ -37,6 +38,12 @@ body {
     var(--bg);
   color: var(--text);
   line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body.menu-open {
+  overflow: hidden;
 }
 
 a {
@@ -49,16 +56,37 @@ input,
 select,
 textarea {
   font: inherit;
+  touch-action: manipulation;
+}
+
+/* Inputs nativos em iOS não devem zoomar em foco (<16px causa zoom) */
+@media (max-width: 900px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 .app-shell {
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.mobile-topbar {
+  display: none;
+}
+
+.nav-backdrop {
+  display: none;
 }
 
 .sidebar {
   padding: 1.5rem 1.25rem;
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   border-right: 1px solid var(--border);
   background: rgba(15, 20, 16, 0.85);
   backdrop-filter: blur(8px);
@@ -68,6 +96,9 @@ textarea {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  z-index: 40;
 }
 
 .brand {
@@ -110,6 +141,9 @@ textarea {
   border-radius: 8px;
   color: var(--muted);
   transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .sidebar nav a:hover {
@@ -208,7 +242,11 @@ textarea {
 
 .main {
   padding: 2rem 2.25rem 3rem;
+  padding-left: max(2.25rem, env(safe-area-inset-left));
+  padding-right: max(2.25rem, env(safe-area-inset-right));
   max-width: 1200px;
+  width: 100%;
+  min-width: 0;
 }
 
 .page-header {
@@ -244,6 +282,7 @@ textarea {
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0.55rem 1rem;
+  min-height: 42px;
   cursor: pointer;
   background: var(--bg-soft);
   color: var(--text);
@@ -290,13 +329,14 @@ textarea {
 }
 
 .btn-sm {
-  padding: 0.35rem 0.7rem;
+  padding: 0.4rem 0.75rem;
+  min-height: 36px;
   font-size: 0.85rem;
 }
 
 .grid-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -653,6 +693,18 @@ textarea {
   border-top: 1px solid var(--border);
 }
 
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  margin: 0 -0.25rem;
+  padding: 0 0.25rem;
+}
+
+.table-wrap table {
+  min-width: 640px;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -660,7 +712,10 @@ textarea {
   display: grid;
   place-items: center;
   z-index: 50;
-  padding: 1rem;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+    max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal {
@@ -669,8 +724,9 @@ textarea {
   border-radius: 14px;
   width: min(520px, 100%);
   padding: 1.5rem;
-  max-height: 90vh;
-  overflow: visible;
+  max-height: min(90vh, 90dvh);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal h2 {
@@ -863,12 +919,6 @@ textarea {
   opacity: 0.72;
 }
 
-@media (max-width: 900px) {
-  .rates-form {
-    grid-template-columns: 1fr;
-  }
-}
-
 .row-actions {
   display: flex;
   gap: 0.4rem;
@@ -957,6 +1007,11 @@ textarea {
   }
 }
 
+.linkish {
+  color: var(--accent);
+  font-weight: 500;
+}
+
 .linkish:hover {
   text-decoration: underline;
 }
@@ -1023,16 +1078,130 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
-    position: relative;
-    height: auto;
-    border-right: none;
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 45;
+    padding: 0.75rem 1rem;
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+    background: rgba(15, 20, 16, 0.94);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
 
+  .mobile-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-topbar-brand .brand-mark {
+    width: 34px;
+    height: 34px;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  .mobile-topbar-brand strong {
+    font-size: 0.92rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-logout {
+    flex-shrink: 0;
+  }
+
+  .menu-toggle {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-soft);
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.18s, opacity 0.18s;
+  }
+
+  .nav-open .menu-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-open .menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-open .menu-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 48;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(300px, 86vw);
+    height: 100vh;
+    height: 100dvh;
+    z-index: 50;
+    transform: translateX(-105%);
+    transition: transform 0.22s ease;
+    border-right: 1px solid var(--border);
+    border-bottom: none;
+    box-shadow: 12px 0 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .nav-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar .brand {
+    display: none;
+  }
+
   .sidebar nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+
+  .sidebar nav a {
+    padding: 0.85rem 1rem;
+    min-height: 46px;
+  }
+
+  .sidebar-note {
+    display: none;
   }
 
   .panel-grid {
@@ -1040,14 +1209,166 @@ textarea {
   }
 
   .main {
-    padding: 1.25rem;
+    padding: 1rem 1rem 2.5rem;
+    padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
   }
 
-  .form-grid {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.7rem;
+  }
+
+  .page-header p {
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions .btn,
+  .page-header .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .filters label,
+  .filters .date-range-filter,
+  .filters .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .date-range-trigger {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .date-range-popover {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .form-grid,
+  .rates-form {
     grid-template-columns: 1fr;
   }
 
-  .table-wrap {
-    overflow-x: auto;
+  .rates-form-actions .btn {
+    width: 100%;
+  }
+
+  .grid-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .stat {
+    padding: 0.9rem;
+  }
+
+  .stat .value {
+    font-size: 1.15rem;
+    word-break: break-word;
+  }
+
+  .panel {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .table-wrap table {
+    min-width: 560px;
+    font-size: 0.84rem;
+  }
+
+  th,
+  td {
+    padding: 0.65rem 0.45rem;
+  }
+
+  .row-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .row-actions .btn {
+    width: 100%;
+  }
+
+  .bar-row {
+    grid-template-columns: 54px 1fr;
+    gap: 0.5rem;
+  }
+
+  .bar-row span:last-child {
+    grid-column: 2;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .meta-list div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .modal-actions,
+  .confirm-modal .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+  .login-page {
+    padding: 1rem;
+    padding-top: max(2rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    align-items: flex-start;
+  }
+
+  .login-card {
+    padding: 1.35rem;
+  }
+
+  .login-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .login-brand h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .mobile-topbar-brand strong {
+    font-size: 0.85rem;
   }
 }
