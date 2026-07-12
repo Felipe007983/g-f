@@ -30,8 +30,8 @@ async function request(path, options = {}) {
 
   if (res.status === 401 && !path.startsWith('/auth/login')) {
     clearToken();
-    if (!window.location.pathname.startsWith('/login')) {
-      window.location.assign('/login');
+    if (!window.location.hash.includes('/login')) {
+      window.location.assign('/#/login');
     }
   }
 
